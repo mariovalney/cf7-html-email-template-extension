@@ -65,6 +65,9 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 			// CF7 Properties
 			$this->add_filter( 'wpcf7_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
 
+			// CF7 Mail Compose
+			$this->add_filter( 'wpcf7_mail_components', array( $this, 'wpcf7_mail_components' ), 20, 2 );
+
 		}
 
 		/**
@@ -126,9 +129,25 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		}
 
 		/**
+		 * Replace tags in $string
+		 *
+		 * @since    1.0.0
+		 * @param    string		$string 	Text to be processed
+		 */
+		public function replace_tags( $text ) {
+
+			$text = str_replace( '[home_url]', home_url(), $text );
+			$text = str_replace( '[site_name]', get_bloginfo( "name" ), $text );
+
+			return $text;
+
+		}
+
+		/**
 		 * Filter the 'wpcf7_editor_panels' to add necessary tabs
 		 *
 		 * @since    1.0.0
+		 * @param    WPCF7_ContactForm 	$contactform	Current ContactForm Obj
 		 */
 		public function cf7hete_html_template_panel_html( WPCF7_ContactForm $contactform ) {
 
@@ -138,9 +157,37 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 
 		
 		/**
+		 * Filter the 'wpcf7_mail_components' to change componentes on composing email
+		 *
+		 * @since    1.0.0
+		 * @param    array 				$components		Componentes from email
+		 * @param    WPCF7_ContactForm 	$contactform	Current ContactForm Obj
+		 */
+		public function wpcf7_mail_components( $components, $contactform ) {
+
+			$properties = $contactform->get_properties();
+			if ( isset( $properties[ Cf7hete_Module_Html_Template::MODULE_SLUG ] ) ) {
+				$properties = $properties[ Cf7hete_Module_Html_Template::MODULE_SLUG ];
+
+				if ( $properties['activate'] ) {
+					$body = $this->replace_tags( $properties['header-html'] );
+					$body .= $components['body'];
+					$body .= $this->replace_tags( $properties['footer-html'] );
+
+					$components['body'] = $body;
+				}
+			}
+
+
+			return $components;
+
+		}
+
+		/**
 		 * Filter the 'wpcf7_editor_panels' to add necessary tabs
 		 *
 		 * @since    1.0.0
+		 * @param    array 				$panels		Panels in CF7 Administration
 		 */
 		public function wpcf7_editor_panels( $panels ) {
 
@@ -157,6 +204,8 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * Filter the 'wpcf7_contact_form_properties' to add necessary properties
 		 *
 		 * @since    1.0.0
+		 * @param    array 				$properties		ContactForm Obj Properties
+		 * @param    obj 				$instance		ContactForm Obj Instance
 		 */
 		public function wpcf7_contact_form_properties( $properties, $instance ) {
 			$module_slug = Cf7hete_Module_Html_Template::MODULE_SLUG;
@@ -186,6 +235,7 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * Action 'wpcf7_save_contact_form' to save properties do Contact Form Post
 		 *
 		 * @since    1.0.0
+		 * @param    WPCF7_ContactForm 	$contactform	Current ContactForm Obj
 		 */
 		public function wpcf7_save_contact_form( $contact_form ) {
 

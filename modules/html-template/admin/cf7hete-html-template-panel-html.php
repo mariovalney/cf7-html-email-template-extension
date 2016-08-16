@@ -69,7 +69,7 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {//
 		<br>
 		<?php echo __( 'You can use these tags to use dinamic content', CF7HETE_TEXTDOMAIN ) . ": " ?>
 		<span class="mailtag code">[home_url]</span>
-		<span class="mailtag code">[logo]</span>
+		<span class="mailtag code">[site_name]</span>
 	</legend>
 
 	<table class="form-table">
