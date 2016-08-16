@@ -21,12 +21,6 @@
 // If this file is called directly, abort.
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if ( ! function_exists( 'you_shall_not_pass' ) ) {
-	function you_shall_not_pass() {
-		defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
-	}
-}
-
 if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
 
 	class Cf7_Html_Email_Template_Extension {
@@ -78,6 +72,15 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
 		protected $filters;
 
 		/**
+		 * The array of modules of plugin.
+		 *
+		 * @since    1.0.0
+		 * @access   protected
+		 * @var      array    $modules    The modules to be used in this plugin.
+		 */
+		protected $modules;
+
+		/**
 		 * Define the core functionality of the plugin.
 		 *
 		 * @since    1.0.0
@@ -88,9 +91,10 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
 			$this->version = CF7HETE_VERSION;
 			$this->class_tag = CF7HETE_TAG;
 
-			$this->actions = $this->filters = array();
+			$this->actions = $this->filters = $this->modules = array();
 
 			$this->define_hooks();
+			$this->add_modules();
 
 		}
 
@@ -101,7 +105,9 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
 		 * @return    string    The name of the plugin.
 		 */
 		public function get_plugin_name() {
+
 			return $this->plugin_name;
+
 		}
 
 		/**
@@ -111,12 +117,13 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
 		 * @return    string    The version number of the plugin.
 		 */
 		public function get_version() {
+
 			return $this->version;
+
 		}
 
 		/**
-		 * Register all of the hooks related to the admin area functionality
-		 * of the plugin.
+		 * Register the hooks for Core
 		 *
 		 * @since    1.0.0
 		 * @access   private
@@ -129,9 +136,19 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
 			// Admin Hooks
 			$this->add_action( 'admin_notices', array( $this, 'check_cf7_plugin' ) );
 
-			//$this->add_action( 'admin_enqueue_scripts', 'enqueue_styles' );
-			//$this->add_action( 'admin_enqueue_scripts', 'enqueue_scripts' );
-			//$this->add_action( 'admin_notices', 'admin_notices' );
+		}
+
+		/**
+		 * Load all the plugins modules.
+		 *
+		 * @since    1.0.0
+		 * @access   private
+		 */
+		private function add_modules() {
+
+			require_once plugin_dir_path( __FILE__ ) . 'modules/html-template/class-cf7hete-module-html-template.php';
+
+			$this->modules['html_template'] = new Cf7hete_Module_Html_Template( $this, CF7HETE_TAG );
 
 		}
 
@@ -237,6 +254,13 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
 		 */
 		public function run() {
 
+			define( 'CF7HETE_LOADED', '1' );
+
+			// Running Modules (first of all)
+			foreach ( $this->modules as $module ) {
+				$module->run();
+			}
+
 			// Running Filters
 			foreach ( $this->filters as $hook ) {
 				add_filter( $hook['hook'], $hook['callback'], $hook['priority'], $hook['accepted_args'] );
@@ -261,7 +285,7 @@ function cf7hete_starts() {
 
 	define( 'CF7HETE_VERSION', '1.0.0' );
 	define( 'CF7HETE_TEXTDOMAIN', 'cf7-html-email-template-extension' );
-	define( 'CF7HETE_TAG', 'udioDCODC1OdCzv-Q4hGlLLxy0t3q6V' );
+	define( 'CF7HETE_TAG', 'cf7_html_email_template_extension' );
 
 	$plugin = new Cf7_Html_Email_Template_Extension();
 
