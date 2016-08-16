@@ -192,7 +192,7 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		public function wpcf7_editor_panels( $panels ) {
 
 			$panels['cf7hete-html-template-panel'] = array(
-				'title'		=> _x( 'HTML Template', 'HTML Template Module Title', CF7HETE_TEXTDOMAIN ),
+				'title'		=> __( 'HTML Template', CF7HETE_TEXTDOMAIN ),
 				'callback'	=> array( $this, 'cf7hete_html_template_panel_html' ),
 			);
 

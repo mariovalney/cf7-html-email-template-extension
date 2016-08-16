@@ -41,8 +41,16 @@ The plugin applies a HTML template to email sent from your CF7. The Template is 
 Snopes. The intention here is to improve CF7 functionality.
 We'll create another version to all WordPress emails or add an option to extend this plugin, but not in this version.
 
+== Screenshots ==
+
+1. HTML Template configurations
+2. Example HTML Email with CF7 default Form
+
 == Changelog ==
 
 = 1.0 =
 * It's alive!
 * Basic use and configurations.
+* Send HTML Emails like in screenshot 2.
+* User can choose it Form will use HTML Template.
+* HTML Template can be edited or customized.

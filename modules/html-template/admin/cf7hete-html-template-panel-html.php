@@ -30,12 +30,12 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {//
 ?>
 
 <h2>
-	<?php _ex( 'HTML Template', 'HTML Template Module Title', CF7HETE_TEXTDOMAIN ) ?>
+	<?php _e( 'HTML Template', CF7HETE_TEXTDOMAIN ) ?>
 </h2>
 
 <fieldset style="margin-bottom: 40px;">
 	<legend>
-		<?php _ex( 'In the following fields, you can activate the HTML Template for emails you are sending with this form and the markup of header and footer itself. You can let it in blank', 'HTML Template Module Legend', CF7HETE_TEXTDOMAIN ); ?>
+		<?php _ex( 'In the following fields, you can activate the HTML Template for emails.', 'HTML Template Module Legend', CF7HETE_TEXTDOMAIN ); ?>
 	</legend>
 
 	<table class="form-table">

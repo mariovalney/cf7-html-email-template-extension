@@ -1,0 +1,76 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: cf7-html-email-template-extension\n"
+"POT-Creation-Date: 2016-08-16 03:49-0300\n"
+"PO-Revision-Date: 2016-08-16 03:49-0300\n"
+"Last-Translator: Mário Valney <mariovalney@gmail.com>\n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.3\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-KeywordsList: __;_e;_x;_ex;esc_attr_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: cf7-html-email-template-extension.php:235
+#, php-format
+msgid ""
+"You need to install/activate %s Contact Form 7%s plugin to enable %s HTML "
+"Email Template Extension %s "
+msgstr ""
+
+#: cf7-html-email-template-extension.php:244
+msgid "Do it now?"
+msgstr ""
+
+#: cf7-html-email-template-extension.php:295
+msgid "The Cf7_Html_Email_Template_Extension was overwritten..."
+msgstr ""
+
+#: modules/html-template/class-cf7hete-module-html-template.php:85
+#: modules/html-template/class-cf7hete-module-html-template.php:103
+msgid "Core was not passed in \"Cf7hete_Module_Html_Template\"."
+msgstr ""
+
+#: modules/html-template/class-cf7hete-module-html-template.php:195
+#: modules/html-template/admin/cf7hete-html-template-panel-html.php:33
+msgid "HTML Template"
+msgstr ""
+
+#: modules/html-template/admin/cf7hete-html-template-panel-html.php:38
+msgid "In the following fields, you can activate the HTML Template for emails."
+msgstr ""
+
+#: modules/html-template/admin/cf7hete-html-template-panel-html.php:46
+msgid "Activate"
+msgstr ""
+
+#: modules/html-template/admin/cf7hete-html-template-panel-html.php:53
+msgid "Activate in this form ( force HTML content type for emails )"
+msgstr ""
+
+#: modules/html-template/admin/cf7hete-html-template-panel-html.php:63
+msgid "Advanced Settings"
+msgstr ""
+
+#: modules/html-template/admin/cf7hete-html-template-panel-html.php:68
+#, php-format
+msgid ""
+"In the following fields, you can set the markup of header and footer itself. "
+"%s Instructions%s"
+msgstr ""
+
+#: modules/html-template/admin/cf7hete-html-template-panel-html.php:70
+msgid "You can use these tags to use dinamic content"
+msgstr ""
+
+#: modules/html-template/admin/cf7hete-html-template-panel-html.php:80
+msgid "HTML for Header"
+msgstr ""
+
+#: modules/html-template/admin/cf7hete-html-template-panel-html.php:91
+msgid "HTML for Footer"
+msgstr ""
