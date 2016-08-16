@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: mariovalney
 Donate link: http://mariovalney.com
-Tags: comments, spam
+Tags: emails, cf7, contact form, email template, html email
 Requires at least: 3.0.1
 Tested up to: 4.5
 Stable tag: 4.5
