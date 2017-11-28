@@ -1,10 +1,10 @@
-=== Plugin Name ===
+=== CF7 - HTML Email Template Extension ===
 Contributors: mariovalney
 Donate link: http://mariovalney.com
 Tags: emails, cf7, contact form, email template, html email
 Requires at least: 3.0.1
-Tested up to: 4.5
-Stable tag: 4.5
+Tested up to: 4.9
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ Improve your Contact Form 7 emails with a HTML Template.
 
 But even it allow users to use HTML instead of just Plain Text email it's not trivial to users who aren't developers create something really pro.
 
-However, time to leave all your worries behind! As a recently launched "Contact Form 7 - HTML Mail Template Extension" will allow you, WordPress developers or not, to use a simply but beautiful HTML Template in your CF7 so users will get better emails than just amount of text. 
+However, time to leave all your worries behind! As a recently launched "Contact Form 7 - HTML Mail Template Extension" will allow you, WordPress developers or not, to use a simply but beautiful HTML Template in your CF7 so users will get better emails than just amount of text.
 
 = Configurations =
 
@@ -38,7 +38,7 @@ The plugin applies a HTML template to email sent from your CF7. The Template is 
 
 = Does it works for emails sent out of CF7? =
 
-Snopes. The intention here is to improve CF7 functionality.
+No. The intention here is to improve CF7 functionality.
 We'll create another version to all WordPress emails or add an option to extend this plugin, but not in this version.
 
 == Screenshots ==
@@ -49,6 +49,7 @@ We'll create another version to all WordPress emails or add an option to extend 
 == Changelog ==
 
 = 1.0 =
+
 * It's alive!
 * Basic use and configurations.
 * Send HTML Emails like in screenshot 2.
