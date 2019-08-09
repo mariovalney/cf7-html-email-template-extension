@@ -1,10 +1,10 @@
-=== CF7 - HTML Email Template Extension ===
+=== HTML Template for CF7 ===
 Contributors: mariovalney
 Donate link: http://mariovalney.com
-Tags: emails, cf7, contact form, email template, html email
+Tags: emails, cf7, contact form, contact form 7, email template, html email
 Requires at least: 3.0.1
-Tested up to: 4.9
-Stable tag: 1.0.1
+Tested up to: 5.2.2
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,10 @@ We'll create another version to all WordPress emails or add an option to extend 
 2. Example HTML Email with CF7 default Form
 
 == Changelog ==
+
+= 1.0.2 =
+
+* Plugin Renamed
 
 = 1.0 =
 
