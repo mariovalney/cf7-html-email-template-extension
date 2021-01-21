@@ -3,7 +3,7 @@
 **Donate link:** https://mariovalney.com  
 **Tags:** emails, cf7, contact form, contact form 7, email template, html email  
 **Requires at least:** 3.0.1  
-**Tested up to:** 5.5  
+**Tested up to:** 5.7  
 **Stable tag:** trunk  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -51,6 +51,10 @@ We'll create another version to all WordPress emails or add an option to extend 
 
 
 ## Changelog ##
+
+### 1.1 ###
+
+* Improved Code Editor.
 
 ### 1.0.2 ###
 

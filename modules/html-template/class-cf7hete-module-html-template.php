@@ -43,9 +43,7 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @param    array		$tag	The Core Tag
 		 */
 		public function __construct( Cf7_Html_Email_Template_Extension $core ) {
-
 			$this->core = $core;
-
 		}
 
 		/**
@@ -55,9 +53,9 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @access   private
 		 */
 		private function define_hooks() {
-
 			// CF7 Editor Tabs
 			$this->add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
+			$this->add_action( 'wpcf7_enqueue_styles', array( $this, 'wpcf7_enqueue_styles' ) );
 
 			// CF7 Save Contact Form
 			$this->add_action( 'wpcf7_save_contact_form', array( $this, 'wpcf7_save_contact_form' ) );
@@ -67,7 +65,6 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 
 			// CF7 Mail Compose
 			$this->add_filter( 'wpcf7_mail_components', array( $this, 'wpcf7_mail_components' ), 20, 2 );
-
 		}
 
 		/**
@@ -77,15 +74,13 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @see    Cf7_Html_Email_Template_Extension->add_action
 		 */
 		private function add_action( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
-
-			if ( $this->core != null ) {
-				$this->core->add_action( $hook, $callback, $priority, $accepted_args );
-			} else {
+			if ( empty( $this->core ) ) {
 				if ( WP_DEBUG ) {
 					trigger_error( __( 'Core was not passed in "Cf7hete_Module_Html_Template".' ), E_USER_WARNING );
 				}
 			}
 
+			$this->core->add_action( $hook, $callback, $priority, $accepted_args );
 		}
 
 		/**
@@ -95,7 +90,6 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @see    Cf7_Html_Email_Template_Extension->add_filter
 		 */
 		private function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
-
 			if ( $this->core != null ) {
 				$this->core->add_filter( $hook, $callback, $priority, $accepted_args );
 			} else {
@@ -112,9 +106,7 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @since    1.0.0
 		 */
 		private function get_default_header() {
-
 			return file_get_contents( plugin_dir_path( __FILE__ ) . 'templates/default-header.htm' );
-
 		}
 
 		/**
@@ -123,9 +115,7 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @since    1.0.0
 		 */
 		private function get_default_footer() {
-
 			return file_get_contents( plugin_dir_path( __FILE__ ) . 'templates/default-footer.htm' );
-
 		}
 
 		/**
@@ -135,12 +125,10 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @param    string		$string 	Text to be processed
 		 */
 		public function replace_tags( $text ) {
-
 			$text = str_replace( '[home_url]', home_url(), $text );
 			$text = str_replace( '[site_name]', get_bloginfo( "name" ), $text );
 
 			return $text;
-
 		}
 
 		/**
@@ -150,12 +138,17 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @param    WPCF7_ContactForm 	$contactform	Current ContactForm Obj
 		 */
 		public function cf7hete_html_template_panel_html( WPCF7_ContactForm $contactform ) {
-
 			require plugin_dir_path( __FILE__ ) . 'admin/cf7hete-html-template-panel-html.php';
-
 		}
 
-		
+		/**
+		 * Action: 'wpcf7_enqueue_styles'
+		 *
+		 * @return void
+		 */
+		public function wpcf7_enqueue_styles() {
+		}
+
 		/**
 		 * Filter the 'wpcf7_mail_components' to change componentes on composing email
 		 *
@@ -164,8 +157,8 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @param    WPCF7_ContactForm 	$contactform	Current ContactForm Obj
 		 */
 		public function wpcf7_mail_components( $components, $contactform ) {
-
 			$properties = $contactform->get_properties();
+
 			if ( isset( $properties[ Cf7hete_Module_Html_Template::MODULE_SLUG ] ) ) {
 				$properties = $properties[ Cf7hete_Module_Html_Template::MODULE_SLUG ];
 
@@ -180,7 +173,6 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 
 
 			return $components;
-
 		}
 
 		/**
@@ -190,14 +182,12 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @param    array 				$panels		Panels in CF7 Administration
 		 */
 		public function wpcf7_editor_panels( $panels ) {
-
 			$panels['cf7hete-html-template-panel'] = array(
 				'title'		=> __( 'HTML Template', CF7HETE_TEXTDOMAIN ),
 				'callback'	=> array( $this, 'cf7hete_html_template_panel_html' ),
 			);
 
 			return $panels;
-
 		}
 
 		/**
@@ -228,7 +218,6 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 			}
 
 			return $properties;
-
 		}
 
 		/**
@@ -238,9 +227,8 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @param    WPCF7_ContactForm 	$contactform	Current ContactForm Obj
 		 */
 		public function wpcf7_save_contact_form( $contact_form ) {
-
 			$module_slug = Cf7hete_Module_Html_Template::MODULE_SLUG;
-			
+
 			$new_property = array();
 
 			if ( isset( $_POST['cf7hete-html-template-module-activate'] ) && $_POST['cf7hete-html-template-module-activate'] == "1" ) {
@@ -268,10 +256,9 @@ if ( ! class_exists( 'Cf7hete_Module_Html_Template' ) ) {
 		 * @since    1.0.0
 		 */
 		public function run() {
-
 			$this->define_hooks();
-
 		}
 
 	}
+
 }

@@ -7,8 +7,7 @@ $activated = "0";
 $header_html = "";
 $footer_html = "";
 
-if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {//
-
+if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 	$module_slug = Cf7hete_Module_Html_Template::MODULE_SLUG;
 
 	$properties = get_post_meta( $contactform->id(), "_" . $module_slug, true );
@@ -24,7 +23,6 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {//
 	if ( isset( $properties[ 'footer-html' ] ) ) {
 		$footer_html = $properties[ 'footer-html' ];
 	}
-
 }
 
 ?>
