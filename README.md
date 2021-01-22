@@ -2,7 +2,7 @@
 **Contributors:** mariovalney  
 **Donate link:** https://mariovalney.com  
 **Tags:** emails, cf7, contact form, contact form 7, email template, html email  
-**Requires at least:** 3.0.1  
+**Requires at least:** 4.5  
 **Tested up to:** 5.7  
 **Stable tag:** trunk  
 **License:** GPLv2 or later  
@@ -41,6 +41,12 @@ The plugin applies a HTML template to email sent from your CF7. The Template is 
 No. The intention here is to improve CF7 functionality.
 We'll create another version to all WordPress emails or add an option to extend this plugin, but not in this version.
 
+### I don't like the new editor. How to disable it? ###
+
+You can add the following code to your `functions.php` file:
+
+`add_filter( 'cf7hete-disable-ace-editor', '__return_true' );`
+
 ## Screenshots ##
 
 ### 1. HTML Template configurations ###
@@ -52,9 +58,10 @@ We'll create another version to all WordPress emails or add an option to extend 
 
 ## Changelog ##
 
-### 1.1 ###
+### 2.0.0 ###
 
 * Improved Code Editor.
+* Refact all the plugin boilerplate (only for developers)
 
 ### 1.0.2 ###
 

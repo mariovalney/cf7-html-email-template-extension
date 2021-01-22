@@ -1,278 +1,356 @@
 <?php
 
 /**
- *
- * @package           Cf7_Html_Email_Template_Extension
- * @since             1.0.0
- *
  * Plugin Name:       HTML Template for CF7
  * Plugin URI:        https://github.com/mariovalney/cf7-html-email-template-extension
  * Description:       Improve your Contact Form 7 emails with a HTML Template.
- * Version:           1.0.2
+ * Version:           2.0.0
  * Author:            Mário Valney
- * Author URI:        http://mariovalney.com
+ * Author URI:        https://mariovalney.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       cf7-html-email-template-extension
- * Domain Path:       /languages
  *
+ * @package         Cf7_Html_Email_Template_Extension
+ * @since           1.0.0
+ *
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 
-// If this file is called directly, abort.
-defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+// If this file is called directly, call the cops.
+defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
 if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
 
-	class Cf7_Html_Email_Template_Extension {
+    class Cf7_Html_Email_Template_Extension {
 
-		/**
-		 * The unique internal identifier of this plugin to avoid overwritten class.
-		 * Discussed with @gugaalves and @leobaiano in WordCamp Fortaleza 2016...
-		 *
-		 * @since    1.0.0
-		 * @access   public
-		 * @var      string    $class_tag	The string used to uniquely identify this class.
-		 */
-		public $class_tag;
+        /**
+         * The single instance of the class.
+         *
+         * @var WooCommerce
+         * @since 1.0.0
+         */
+        protected static $instance = null;
 
-		/**
-		 * The unique identifier of this plugin.
-		 *
-		 * @since    1.0.0
-		 * @access   protected
-		 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
-		 */
-		protected $plugin_name;
+        /**
+         * The array of actions registered with WordPress.
+         *
+         * @since    1.0.0
+         * @access   protected
+         * @var      array    $actions    The actions registered with WordPress to fire when the plugin loads.
+         */
+        protected $actions = array();
 
-		/**
-		 * The current version of the plugin.
-		 *
-		 * @since    1.0.0
-		 * @access   protected
-		 * @var      string    $version    The current version of the plugin.
-		 */
-		protected $version;
+        /**
+         * The array of filters registered with WordPress.
+         *
+         * @since    1.0.0
+         * @access   protected
+         * @var      array    $filters    The filters registered with WordPress to fire when the plugin loads.
+         */
+        protected $filters = array();
 
-		/**
-		 * The array of actions registered with WordPress.
-		 *
-		 * @since    1.0.0
-		 * @access   protected
-		 * @var      array    $actions    The actions registered with WordPress to fire when the plugin loads.
-		 */
-		protected $actions;
+        /**
+         * The array of modules of plugin.
+         *
+         * @since    1.0.0
+         * @access   protected
+         * @var      array    $modules    The modules to be used in this plugin.
+         */
+        protected $modules = array();
 
-		/**
-		 * The array of filters registered with WordPress.
-		 *
-		 * @since    1.0.0
-		 * @access   protected
-		 * @var      array    $filters    The filters registered with WordPress to fire when the plugin loads.
-		 */
-		protected $filters;
+        /**
+         * Main Instance.
+         * You know singleton...
+         *
+         * @since 1.0.0
+         * @return Cf7_Html_Email_Template_Extension
+         */
+        public static function instance() {
+            if ( is_null( self::$instance ) ) {
+                self::$instance = new self();
+            }
 
-		/**
-		 * The array of modules of plugin.
-		 *
-		 * @since    1.0.0
-		 * @access   protected
-		 * @var      array    $modules    The modules to be used in this plugin.
-		 */
-		protected $modules;
+            return self::$instance;
+        }
 
-		/**
-		 * Define the core functionality of the plugin.
-		 *
-		 * @since    1.0.0
-		 */
-		public function __construct() {
-			$this->plugin_name = CF7HETE_TEXTDOMAIN;
-			$this->version = CF7HETE_VERSION;
-			$this->class_tag = CF7HETE_TAG;
+        /**
+         * Define the core functionality of the plugin.
+         *
+         * @since    1.0.0
+         */
+        public function __construct() {
+            $this->define_hooks();
+            $this->add_modules();
+        }
 
-			$this->actions = $this->filters = $this->modules = array();
+        /**
+         * Define things to run when activate plugin
+         *
+         * @since    1.0.0
+         */
+        public function on_activation() {
+            do_action( 'cf7hete_on_core_activation' );
 
-			$this->define_hooks();
-			$this->add_modules();
-		}
+            wp_cache_flush();
+            flush_rewrite_rules();
+        }
 
-		/**
-		 * The name of the plugin.
-		 *
-		 * @since     1.0.0
-		 * @return    string    The name of the plugin.
-		 */
-		public function get_plugin_name() {
-			return $this->plugin_name;
-		}
+        /**
+         * Register the hooks for Core
+         *
+         * @since    1.0.0
+         * @access   private
+         */
+        private function define_hooks() {
+            // Internationalization
+            $this->add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
 
-		/**
-		 * The version number of the plugin.
-		 *
-		 * @since     1.0.0
-		 * @return    string    The version number of the plugin.
-		 */
-		public function get_version() {
-			return $this->version;
-		}
+            // Activation Hook
+            register_activation_hook( __FILE__, array( $this, 'on_activation' ) );
+        }
 
-		/**
-		 * Register the hooks for Core
-		 *
-		 * @since    1.0.0
-		 * @access   private
-		 */
-		private function define_hooks() {
-			// Internationalization
-			$this->add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
+        /**
+         * Load all the plugins modules.
+         *
+         * @since    1.0.0
+         * @access   private
+         */
+        private function add_modules() {
+            $modules = array();
 
-			// Admin Hooks
-			$this->add_action( 'admin_notices', array( $this, 'check_cf7_plugin' ) );
-		}
+            $path = plugin_dir_path( __FILE__ ) . 'modules' . DIRECTORY_SEPARATOR;
+            if ( ! is_dir( $path ) ) {
+                return;
+            }
 
-		/**
-		 * Load all the plugins modules.
-		 *
-		 * @since    1.0.0
-		 * @access   private
-		 */
-		private function add_modules() {
-			require_once plugin_dir_path( __FILE__ ) . 'modules/html-template/class-cf7hete-module-html-template.php';
+            $results = scandir( $path );
 
-			$this->modules['html_template'] = new Cf7hete_Module_Html_Template( $this, CF7HETE_TAG );
-		}
+            foreach ( $results as $result ) {
+                if ( $result[0] === '.' ) {
+                    continue;
+                }
 
-		/**
-		 * A utility function that is used to register the actions and hooks into a single
-		 * collection.
-		 *
-		 * @since    1.0.0
-		 * @access   private
-		 * @param    array		$hooks				The collection of hooks that is being registered (that is, actions or filters).
-		 * @param    string 	$hook 				The name of the WordPress filter that is being registered.
-		 * @param    string 	$callback 			The callback function or a array( $obj, 'method' ) to public method of a class.
-		 * @param    int		$priority 			The priority at which the function should be fired.
-		 * @param    int		$accepted_args 		The number of arguments that should be passed to the $callback.
-		 * @return   array 							The collection of actions and filters registered with WordPress.
-		 */
-		private function add_hook( $hooks, $hook, $callback, $priority, $accepted_args ) {
-			$hooks[] = array(
-				'hook'          => $hook,
-				'callback'      => $callback,
-				'priority'      => $priority,
-				'accepted_args' => $accepted_args
-			);
+                if ( ! is_dir( $path . $result ) ) {
+                    continue;
+                }
 
-			return $hooks;
-		}
+                $classfile = $path . $result . DIRECTORY_SEPARATOR . 'class-module-' . $result . '.php';
+                if ( ! file_exists( $classfile ) ) {
+                    continue;
+                }
 
-		/**
-		 * Add a new action to the collection to be registered with WordPress.
-		 *
-		 * @since    1.0.0
-		 * @param    string		$hook             The name of the WordPress action that is being registered.
-		 * @param    string		$callback         The callback function or a array( $obj, 'method' ) to public method of a class.
-		 * @param    int		$priority         Optional. he priority at which the function should be fired. Default is 10.
-		 * @param    int		$accepted_args    Optional. The number of arguments that should be passed to the $callback. Default is 1.
-		 */
-		public function add_action( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
-			$this->actions = $this->add_hook( $this->actions, $hook, $callback, $priority, $accepted_args );
-		}
+                $classname = str_replace( '-', ' ', $result );
+                $classname = ucfirst( $classname );
+                $classname = str_replace( ' ', '_', $classname );
+                $classname = 'CF7HETE_Module_' . $classname;
 
-		/**
-		 * Add a new filter to the collection to be registered with WordPress.
-		 *
-		 * @since    1.0.0
-		 * @param    string		$hook             The name of the WordPress filter that is being registered.
-		 * @param    string		$callback         The callback function or a array( $obj, 'method' ) to public method of a class.
-		 * @param    int		$priority         Optional. he priority at which the function should be fired. Default is 10.
-		 * @param    int		$accepted_args    Optional. The number of arguments that should be passed to the $callback. Default is 1
-		 */
-		public function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
-			$this->filters = $this->add_hook( $this->filters, $hook, $callback, $priority, $accepted_args );
-		}
+                $module_data  = get_file_data( $classfile, array( 'dependencies' => 'Depends' ) );
+                $dependencies = $module_data['dependencies'];
 
-		/**
-		 * Define the locale for this plugin for internationalization.
-		 *
-		 *
-		 * @since    1.0.0
-		 * @access   private
-		 */
-		public function load_plugin_textdomain() {
-			load_plugin_textdomain( CF7HETE_TEXTDOMAIN, false, basename( dirname( __FILE__ ) ) . '/languages/' );
-		}
+                if ( ! empty( $dependencies ) ) {
+                    $dependencies = str_replace( ' ', '', $dependencies );
+                    $dependencies = explode( ',', $dependencies );
+                }
 
-		/**
-		 * Check Contact Form 7 Plugin is active
-		 * It's a dependency in this version
-		 *
-		 * @since    1.0.0
-		 * @access   private
-		 */
-		public function check_cf7_plugin() {
-			if ( ! is_plugin_active( 'contact-form-7/wp-contact-form-7.php' ) ) {
-				echo '<div class="notice notice-error is-dismissible">';
-				echo '<p>' . sprintf( __( "You need to install/activate %s Contact Form 7%s plugin to enable %s HTML Email Template Extension %s ", CF7HETE_TEXTDOMAIN ), '<a href="http://contactform7.com/" target="_blank">', '</a>', '<strong>', '</strong>' );
+                $modules[ $result ] = array( $classfile, $classname, $dependencies );
+            }
 
+            $this->load_modules_by_dependence( $modules );
+        }
 
-				if ( file_exists( ABSPATH . PLUGINDIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
-					$url = 'plugins.php';
-				} else {
-					$url = 'plugin-install.php?tab=search&s=Contact+form+7';
-				}
+        /**
+         * Load modules using dependencies
+         *
+         * @since    1.0.0
+         * @access   private
+         */
+        private function load_modules_by_dependence( $modules ) {
+            $not_loaded_modules = array();
 
-				echo '. <a href="' . admin_url( $url ) . '">' . __( "Do it now?", CF7HETE_TEXTDOMAIN ) . '</a></p>';
-				echo '</div>';
-			}
-		}
+            foreach ( $modules as $module => $module_data ) {
+                if ( ! empty( $module_data[2] ) ) {
+                    $loaded = array_keys( $this->modules );
 
-		/**
-		 * Run the plugin.
-		 *
-		 * @since    1.0.0
-		 */
-		public function run() {
-			define( 'CF7HETE_LOADED', '1' );
+                    if ( ! empty( array_diff( $module_data[2], $loaded ) ) ) {
+                        $not_loaded_modules[ $module ] = $module_data;
+                        continue;
+                    }
+                }
 
-			// Running Modules (first of all)
-			foreach ( $this->modules as $module ) {
-				$module->run();
-			}
+                require_once $module_data[0];
 
-			// Running Filters
-			foreach ( $this->filters as $hook ) {
-				add_filter( $hook['hook'], $hook['callback'], $hook['priority'], $hook['accepted_args'] );
-			}
+                if ( ! class_exists( $module_data[1] ) ) {
+                    continue;
+                }
 
-			// Running Actions
-			foreach ( $this->actions as $hook ) {
-				add_action( $hook['hook'], $hook['callback'], $hook['priority'], $hook['accepted_args'] );
-			}
-		}
+                $this->modules[ $module ]       = new $module_data[1]();
+                $this->modules[ $module ]->core = $this;
+            }
 
-	}
+            $loaded = array_keys( $this->modules );
 
+            foreach ( $not_loaded_modules as $module_data ) {
+                // Still have dependencies
+                if ( ! empty( array_diff( $module_data[2], $loaded ) ) ) {
+                    continue;
+                }
+
+                // At least, one module has not dependencies: we can retry
+                $this->load_modules_by_dependence( $not_loaded_modules );
+                break;
+            }
+        }
+
+        /**
+         * A utility function that is used to register the actions and hooks into a single
+         * collection.
+         *
+         * @since    1.0.0
+         * @access   private
+         * @param    array      $hooks              The collection of hooks that is being registered (that is, actions or filters).
+         * @param    string     $hook               The name of the WordPress filter that is being registered.
+         * @param    string     $callback           The callback function or a array( $obj, 'method' ) to public method of a class.
+         * @param    int        $priority           The priority at which the function should be fired.
+         * @param    int        $accepted_args      The number of arguments that should be passed to the $callback.
+         * @return   array                          The collection of actions and filters registered with WordPress.
+         */
+        private function add_hook( $hooks, $hook, $callback, $priority, $accepted_args ) {
+            $hooks[] = array(
+                'hook'          => $hook,
+                'callback'      => $callback,
+                'priority'      => $priority,
+                'accepted_args' => $accepted_args,
+            );
+
+            return $hooks;
+        }
+
+        /**
+         * Keep module objects
+         *
+         * @since    1.0.0
+         * @access   public
+         */
+        public function get_module( $module_name ) {
+            if ( empty( $this->modules[ $module_name ] ) ) {
+                return false;
+            }
+
+            return $this->modules[ $module_name ];
+        }
+
+        /**
+         * Add a new action to the collection to be registered with WordPress.
+         *
+         * @since    1.0.0
+         * @param    string     $hook             The name of the WordPress action that is being registered.
+         * @param    string     $callback         The callback function or a array( $obj, 'method' ) to public method of a class.
+         * @param    int        $priority         Optional. he priority at which the function should be fired. Default is 10.
+         * @param    int        $accepted_args    Optional. The number of arguments that should be passed to the $callback. Default is 1.
+         */
+        public function add_action( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
+            $this->actions = $this->add_hook( $this->actions, $hook, $callback, $priority, $accepted_args );
+        }
+
+        /**
+         * Add a new filter to the collection to be registered with WordPress.
+         *
+         * @since    1.0.0
+         * @param    string     $hook             The name of the WordPress filter that is being registered.
+         * @param    string     $callback         The callback function or a array( $obj, 'method' ) to public method of a class.
+         * @param    int        $priority         Optional. he priority at which the function should be fired. Default is 10.
+         * @param    int        $accepted_args    Optional. The number of arguments that should be passed to the $callback. Default is 1
+         */
+        public function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
+            $this->filters = $this->add_hook( $this->filters, $hook, $callback, $priority, $accepted_args );
+        }
+
+        /**
+         * Define the locale for this plugin for internationalization.
+         *
+         *
+         * @since    1.0.0
+         * @access   private
+         */
+        public function load_plugin_textdomain() {
+            load_plugin_textdomain( 'api-improver-for-woocommerce', false, basename( dirname( __FILE__ ) ) . '/languages/' );
+        }
+
+        /**
+         * Run the plugin.
+         *
+         * @since    1.0.0
+         */
+        public function run() {
+            // Definitions to plugin
+            define( 'CF7HETE_VERSION', '1.1.0' );
+            define( 'CF7HETE_PLUGIN_FILE', __FILE__ );
+            define( 'CF7HETE_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+            define( 'CF7HETE_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname( CF7HETE_PLUGIN_BASENAME ) );
+            define( 'CF7HETE_PLUGIN_DIR', dirname( CF7HETE_PLUGIN_BASENAME ) );
+            define( 'CF7HETE_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+
+            // Running Modules
+            foreach ( $this->modules as $module_slug => $module ) {
+                // Run Module: before anything
+                if ( method_exists( $module, 'run' ) ) {
+                    $module->run();
+                }
+
+                // Include Files if Configured
+                if ( property_exists( $module, 'includes' ) ) {
+                    foreach ( (array) $module->includes as $class ) {
+                        $file = CF7HETE_PLUGIN_PATH . '/modules/' . $module_slug . '/includes/' . $class . '.php';
+                        if ( file_exists( $file ) ) {
+                            require_once $file;
+                        }
+                    }
+                }
+            }
+
+            // After Run for everyone
+            foreach ( $this->modules as $module_slug => $module ) {
+                if ( method_exists( $module, 'after_run' ) ) {
+                    $module->after_run();
+                }
+            }
+
+            // Define Hooks for everyone
+            foreach ( $this->modules as $module_slug => $module ) {
+                if ( method_exists( $module, 'define_hooks' ) ) {
+                    $module->define_hooks();
+                }
+            }
+
+            // Running Filters
+            foreach ( $this->filters as $hook ) {
+                add_filter( $hook['hook'], $hook['callback'], $hook['priority'], $hook['accepted_args'] );
+            }
+
+            // Running Actions
+            foreach ( $this->actions as $hook ) {
+                add_action( $hook['hook'], $hook['callback'], $hook['priority'], $hook['accepted_args'] );
+            }
+        }
+    }
 }
 
 /**
  * Making things happening
- *
- * @since    1.0.0
  */
-function cf7hete_starts() {
-	define( 'CF7HETE_VERSION', '1.1.0' );
-	define( 'CF7HETE_TEXTDOMAIN', 'cf7-html-email-template-extension' );
-	define( 'CF7HETE_TAG', 'cf7_html_email_template_extension' );
+$core = Cf7_Html_Email_Template_Extension::instance();
+add_action( 'plugins_loaded', array( $core, 'run' ), 99 );
 
-	$plugin = new Cf7_Html_Email_Template_Extension();
+/**
+ * A global function like WC()
+ */
+function Cf7_Html_Email_Template_Extension() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
+    $modules = Cf7_Html_Email_Template_Extension::instance()->get_modules();
+    if ( empty( $modules ) ) {
+        error_log( 'You cannot call before run method' );
+    }
 
-	if ( CF7HETE_TAG == $plugin->class_tag ) {
-		$plugin->run();
-		return;
-	}
-
-	trigger_error( __( 'The Cf7_Html_Email_Template_Extension was overwritten...' ), E_USER_WARNING );
+    return $modules;
 }
-
-cf7hete_starts();
