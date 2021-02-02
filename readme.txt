@@ -54,14 +54,18 @@ You can add the following code to your `functions.php` file:
 
 == Changelog ==
 
+= 2.0.3 =
+
+* Fix saving header and foot with new editor.
+
 = 2.0.0 =
 
 * Improved Code Editor.
-* Refact all the plugin boilerplate (only for developers)
+* Refact all the plugin boilerplate (only for developers).
 
 = 1.0.2 =
 
-* Plugin Renamed
+* Plugin Renamed.
 
 = 1.0 =
 
