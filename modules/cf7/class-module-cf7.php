@@ -82,7 +82,7 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
          * Save the contact form options
          *
          * @param WPCF7_ContactForm  $contactform
-         * @return  void [<description>]
+         * @return  void
          */
         public function wpcf7_save_contact_form( $contact_form ) {
             $metadata = CF7HETE_Module_Cf7::METADATA;

@@ -79,6 +79,7 @@ if ( ! empty( $contactform ) && is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                 </th>
                 <td>
                     <textarea id="cf7hete-module-html-template-header-html" name="cf7hete-module-html-template-header-html" cols="100" rows="10" class="large-text code"><?php echo esc_textarea( $header_html ); ?></textarea>
+                    <div id="cf7hete-module-html-template-header-html-editor"></div>
                 </td>
             </tr>
 
@@ -90,6 +91,7 @@ if ( ! empty( $contactform ) && is_a( $contactform, 'WPCF7_ContactForm' ) ) {
                 </th>
                 <td>
                     <textarea id="cf7hete-module-html-template-footer-html" name="cf7hete-module-html-template-footer-html" cols="100" rows="10" class="large-text code"><?php echo esc_textarea( $footer_html ); ?></textarea>
+                    <div id="cf7hete-module-html-template-footer-html-editor"></div>
                 </td>
             </tr>
         </tbody>
