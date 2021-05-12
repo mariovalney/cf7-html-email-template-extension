@@ -63,11 +63,13 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
          */
         public function admin_enqueue_scripts() {
             /**
-             * Filter
+             * Filter: cf7hete_disable_ace_editor
              *
              * You can return true to avoid add Ace Editor scripts and styles
+             *
+             * @since 2.1.0
              */
-            if ( apply_filters( 'cf7hete-disable-ace-editor', false ) ) {
+            if ( apply_filters( 'cf7hete_disable_ace_editor', false ) ) {
                 return;
             }
 
@@ -195,6 +197,22 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
          * @since    1.0.0
          */
         private function get_default_template( $name ) {
+            /**
+             * Filter: cf7hete_default_template
+             *
+             * Override the default template content.
+             *
+             * @param string $default_template The content. Return null to use the default content.
+             * @param string $name                          The template name.
+             *
+             * @since 2.1.0
+             */
+            $default_template = apply_filters( 'cf7hete_default_template', null, $name );
+
+            if ( $default_template !== null ) {
+                return $default_template;
+            }
+
             return file_get_contents( CF7HETE_PLUGIN_PATH . '/modules/cf7/includes/templates/default-' . $name . '.htm' );
         }
 
