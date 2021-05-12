@@ -4,8 +4,8 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 $activated = '0';
-$header_html = '';
-$footer_html = '';
+$header_html = $this->get_default_template( 'header' );
+$footer_html = $this->get_default_template( 'footer' );
 
 if ( ! empty( $contactform ) && is_a( $contactform, 'WPCF7_ContactForm' ) ) {
     $metadata = CF7HETE_Module_Cf7::METADATA;

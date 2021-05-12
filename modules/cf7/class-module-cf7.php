@@ -47,12 +47,38 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
          * @param    Cf7_Html_Email_Template_Extension      $core   The Core object
          */
         public function define_hooks() {
+            $this->core->add_action( 'admin_init', array( $this, 'admin_init' ) );
             $this->core->add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
             $this->core->add_action( 'wpcf7_save_contact_form', array( $this, 'wpcf7_save_contact_form' ) );
+            $this->core->add_action( 'wpcf7_admin_misc_pub_section', array( $this, 'wpcf7_admin_misc_pub_section' ) );
 
             $this->core->add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
             $this->core->add_filter( 'wpcf7_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
             $this->core->add_filter( 'wpcf7_mail_components', array( $this, 'wpcf7_mail_components' ), 20, 2 );
+        }
+
+        /**
+         * Action: 'admin_init'
+         * Run code on admin initialization
+         *
+         * @return void
+         */
+        public function admin_init() {
+            global $plugin_page;
+
+            if ( empty( $plugin_page ) || $plugin_page !== 'wpcf7' || ! class_exists( 'WPCF7_ContactForm' ) ) {
+                return;
+            }
+
+            $cf7hete_action = sanitize_text_field( $_GET['cf7hete'] ?? '' );
+            if ( $cf7hete_action !== 'preview' ) {
+                return;
+            }
+
+            // Action: Preview
+            $contactform = WPCF7_ContactForm::get_instance( $_GET['post'] ?? '' );
+            $this->render_mail_preview( $contactform );
+            exit;
         }
 
         /**
@@ -107,6 +133,22 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
             $properties = $contact_form->get_properties();
             $properties[ $metadata ] = $new_property;
             $contact_form->set_properties( $properties );
+        }
+
+        /**
+         * Action: 'wpcf7_admin_misc_pub_section'
+         * Add pub section to CF7
+         *
+         * @return void
+         */
+        public function wpcf7_admin_misc_pub_section() {
+            $contactform = wpcf7_get_current_contact_form();
+
+            if ( empty( $contactform ) || $contactform->initial() ) {
+                return;
+            }
+
+            require CF7HETE_PLUGIN_PATH . '/modules/cf7/includes/view/html-misc-pub-section.php';
         }
 
         /**
@@ -192,6 +234,38 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
         }
 
         /**
+         * Render the preview of template mail
+         *
+         * @return void
+         */
+        private function render_mail_preview( $contactform ) {
+            if ( empty( $contactform ) || empty( $contactform->prop( CF7HETE_Module_Cf7::METADATA ) ) ) {
+                echo $this->get_default_template_for_preview( 'header' );
+                echo $this->get_default_template_for_preview( 'body' );
+                echo $this->get_default_template_for_preview( 'footer' );
+                return;
+            }
+
+            $data = $contactform->prop( CF7HETE_Module_Cf7::METADATA );
+
+            $body = $contactform->prop('mail');
+            $body = $body ? ( $body['body'] ?? null ) : null;
+
+            if ( $body === null ) {
+                $body = $this->get_default_template_for_preview( 'body' );
+            }
+
+            $body = wpautop( $body );
+
+            if ( ! empty( $data['activate'] ) ) {
+                $body = $this->replace_tags( $data['header-html'] ) . $body;
+                $body .= $this->replace_tags( $data['footer-html'] );
+            }
+
+            echo $body;
+        }
+
+        /**
          * Get the default markup file
          *
          * @since    1.0.0
@@ -226,7 +300,28 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
             $text = str_replace( '[home_url]', home_url(), $text );
             $text = str_replace( '[site_name]', get_bloginfo( "name" ), $text );
 
+            $text = str_replace( '[_EXAMPLE_HELLO]', get_bloginfo( "name" ), $text );
+            $text = str_replace( '[_EXAMPLE_CHEERS]', get_bloginfo( "name" ), $text );
+
             return $text;
+        }
+
+        /**
+         * Get the default template for preview
+         *
+         * @since    1.0.0
+         * @param    string     $string     Text to be processed
+         */
+        private function get_default_template_for_preview( $name ) {
+            $content = $this->get_default_template( $name );
+            $content = $this->replace_tags( $content );
+
+            $content = str_replace( 'Hello', __( 'Hello', 'cf7-html-email-template-extension' ), $content );
+            $content = str_replace( 'Cheers', __( 'Cheers', 'cf7-html-email-template-extension' ), $content );
+            $content = str_replace( 'This is a example body for your templates. Please preview your mail within the CF7 administration.', __( 'This is a example body for your templates. Please preview your mail within the CF7 administration.', 'cf7-html-email-template-extension' ), $content );
+            $content = str_replace( 'Field', __( 'Field', 'cf7-html-email-template-extension' ), $content );
+
+            return $content;
         }
 
     }

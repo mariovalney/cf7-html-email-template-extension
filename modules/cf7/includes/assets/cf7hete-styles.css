@@ -2,3 +2,8 @@
     width: 100%;
     min-height: 250px;
 }
+
+.cfhete-preview-wrapper {
+    text-align: right;
+    padding: 0 10px 16px;
+}

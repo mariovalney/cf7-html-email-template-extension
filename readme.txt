@@ -5,6 +5,7 @@ Tags: emails, cf7, contact form, contact form 7, email template, html email
 Requires at least: 4.5
 Tested up to: 5.7
 Stable tag: 2.1.0
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,8 +50,9 @@ You can add the following code to your `functions.php` file:
 
 == Screenshots ==
 
-1. HTML Template configurations
-2. Example HTML Email with CF7 default Form
+1. HTML Template configurations.
+2. Example HTML Email with CF7 default Form.
+3. Preview button on dashboard.
 
 == Changelog ==
 
@@ -58,6 +60,7 @@ You can add the following code to your `functions.php` file:
 
 * Added a filter for developers: "cf7hete_default_template" allow you to override the default template content.
 * Replaced "cf7hete-disable-ace-editor" filter by "cf7hete_disable_ace_editor". We kept the Backward compatibility.
+* Added a preview mail button on administration.
 
 = 2.0.3 =
 
