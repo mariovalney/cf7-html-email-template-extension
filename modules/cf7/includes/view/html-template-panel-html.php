@@ -15,11 +15,11 @@ if ( ! empty( $contactform ) && is_a( $contactform, 'WPCF7_ContactForm' ) ) {
         $activated = '1';
     }
 
-    if ( isset( $properties[ 'header-html' ] ) ) {
+    if ( ! empty( $properties[ 'header-html' ] ) ) {
         $header_html = $properties['header-html'];
     }
 
-    if ( isset( $properties[ 'footer-html' ] ) ) {
+    if ( ! empty( $properties[ 'footer-html' ] ) ) {
         $footer_html = $properties['footer-html'];
     }
 }

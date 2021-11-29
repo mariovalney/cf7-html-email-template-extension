@@ -4,7 +4,7 @@
  * Plugin Name:       HTML Template for CF7
  * Plugin URI:        https://github.com/mariovalney/cf7-html-email-template-extension
  * Description:       Improve your Contact Form 7 emails with a HTML Template.
- * Version:           2.1.0
+ * Version:           2.1.1
  * Author:            Mário Valney
  * Author URI:        https://mariovalney.com
  * License:           GPL-2.0+
@@ -296,7 +296,7 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
          */
         public function run() {
             // Definitions to plugin
-            define( 'CF7HETE_VERSION', '2.1.0' );
+            define( 'CF7HETE_VERSION', '2.1.1' );
             define( 'CF7HETE_PLUGIN_FILE', __FILE__ );
             define( 'CF7HETE_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
             define( 'CF7HETE_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname( CF7HETE_PLUGIN_BASENAME ) );

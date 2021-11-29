@@ -54,6 +54,7 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
 
             $this->core->add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
             $this->core->add_filter( 'wpcf7_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
+            $this->core->add_filter( 'wpcf7_pre_construct_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
             $this->core->add_filter( 'wpcf7_mail_components', array( $this, 'wpcf7_mail_components' ), 20, 2 );
         }
 
@@ -122,11 +123,11 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
             }
 
             if ( isset( $_POST['cf7hete-module-html-template-header-html'] ) ) {
-                $new_property['header-html'] = trim( $_POST['cf7hete-module-html-template-header-html'] );
+                $new_property['header-html'] = trim( wp_unslash( $_POST['cf7hete-module-html-template-header-html'] ) );
             }
 
             if ( isset( $_POST['cf7hete-module-html-template-footer-html'] ) ) {
-                $new_property['footer-html'] = trim( $_POST['cf7hete-module-html-template-footer-html'] );
+                $new_property['footer-html'] = trim( wp_unslash( $_POST['cf7hete-module-html-template-footer-html'] ) );
             }
 
             // Save settings
