@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
 if ( ! class_exists( 'CF7HETE_Module_Dependence' ) ) {
 
-    class CF7HETE_Module_Dependence {
+    class CF7HETE_Module_Dependence extends CF7HETE_Module_Base {
 
         /**
          * List of dependencies to check

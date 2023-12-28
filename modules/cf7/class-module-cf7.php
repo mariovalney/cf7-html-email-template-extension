@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
 if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
 
-    class CF7HETE_Module_Cf7 {
+    class CF7HETE_Module_Cf7 extends CF7HETE_Module_Base {
 
         /**
          * Metadada slug

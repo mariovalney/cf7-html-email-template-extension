@@ -4,7 +4,7 @@
  * Plugin Name:       HTML Template for CF7
  * Plugin URI:        https://github.com/mariovalney/cf7-html-email-template-extension
  * Description:       Improve your Contact Form 7 emails with a HTML Template.
- * Version:           2.1.1
+ * Version:           2.2.0
  * Author:            Mário Valney
  * Author URI:        https://mariovalney.com
  * License:           GPL-2.0+
@@ -81,8 +81,9 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
          * @since    1.0.0
          */
         public function __construct() {
-            $this->define_hooks();
             $this->add_includes();
+
+            $this->define_hooks();
             $this->add_modules();
         }
 
@@ -120,6 +121,7 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
          */
         private function add_includes() {
             require_once plugin_dir_path( __FILE__ ) . 'includes/backward-compatibility.php';
+            require_once plugin_dir_path( __FILE__ ) . 'includes/class-module-base.php';
         }
 
         /**
@@ -196,8 +198,7 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
                     continue;
                 }
 
-                $this->modules[ $module ]       = new $module_data[1]();
-                $this->modules[ $module ]->core = $this;
+                $this->modules[ $module ]       = new $module_data[1]( $this );
             }
 
             $loaded = array_keys( $this->modules );
@@ -296,7 +297,7 @@ if ( ! class_exists( 'Cf7_Html_Email_Template_Extension' ) ) {
          */
         public function run() {
             // Definitions to plugin
-            define( 'CF7HETE_VERSION', '2.1.1' );
+            define( 'CF7HETE_VERSION', '2.2.0' );
             define( 'CF7HETE_PLUGIN_FILE', __FILE__ );
             define( 'CF7HETE_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
             define( 'CF7HETE_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname( CF7HETE_PLUGIN_BASENAME ) );

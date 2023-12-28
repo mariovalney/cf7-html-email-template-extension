@@ -56,6 +56,12 @@ You can add the following code to your `functions.php` file:
 
 == Changelog ==
 
+= 2.2.0 =
+
+* Added a module base class to avoid deprecated call on PHP 8.3.
+
+Props for "Pascal DUBOIN". Thanks.
+
 = 2.1.0 =
 
 * Added a filter for developers: "cf7hete_default_template" allow you to override the default template content.
