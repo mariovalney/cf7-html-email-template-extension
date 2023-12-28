@@ -3,7 +3,7 @@ Contributors: mariovalney
 Donate link: https://mariovalney.com
 Tags: emails, cf7, contact form, contact form 7, email template, html email
 Requires at least: 4.5
-Tested up to: 5.8
+Tested up to: 6.4
 Stable tag: trunk
 Requires PHP: 7.4
 License: GPLv2 or later
