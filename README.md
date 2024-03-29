@@ -62,6 +62,10 @@ You can add the following code to your `functions.php` file:
 
 ## Changelog ##
 
+### 2.2.1 ###
+
+* Avoiding deprecated log for empty mail_2 settings.
+
 ### 2.2.0 ###
 
 * Added a module base class to avoid deprecated call on PHP 8.3.
