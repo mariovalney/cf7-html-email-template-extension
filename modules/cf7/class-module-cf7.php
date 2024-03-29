@@ -190,6 +190,11 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
 
             if ( isset( $properties[ $metadata ]['activate'] ) && $properties[ $metadata ]['activate'] ) {
                 $properties['mail']['use_html'] = '1';
+
+                if ( empty( $properties['mail_2'] ) ) {
+                    $properties['mail_2'] = [];
+                }
+
                 $properties['mail_2']['use_html'] = '1';
             }
 
