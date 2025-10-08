@@ -100,10 +100,14 @@ if ( ! class_exists( 'CF7HETE_Module_Cf7' ) ) {
                 return;
             }
 
-            wp_enqueue_script( 'cf7hete-ace-editor-script', CF7HETE_PLUGIN_URL . '/modules/cf7/includes/assets/ace-editor/ace.js', ['wpcf7-admin'] );
-            wp_enqueue_script( 'cf7hete-script', CF7HETE_PLUGIN_URL . '/modules/cf7/includes/assets/cf7hete-script.js', ['cf7hete-ace-editor-script'] );
+            // Make sure we're on the CF7 admin page
+            if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'wpcf7' ) {
+                return;
+            }
 
-            wp_enqueue_style( 'cf7hete-style', CF7HETE_PLUGIN_URL . '/modules/cf7/includes/assets/cf7hete-styles.css', ['contact-form-7-admin'] );
+            wp_enqueue_script( 'cf7hete-ace-editor-script', CF7HETE_PLUGIN_URL . '/modules/cf7/includes/assets/ace-editor/ace.js', array('jquery'), CF7HETE_VERSION, true );
+            wp_enqueue_script( 'cf7hete-script', CF7HETE_PLUGIN_URL . '/modules/cf7/includes/assets/cf7hete-script.js', array('jquery', 'cf7hete-ace-editor-script', 'wpcf7-admin'), CF7HETE_VERSION, true );
+            wp_enqueue_style( 'cf7hete-style', CF7HETE_PLUGIN_URL . '/modules/cf7/includes/assets/cf7hete-styles.css', array('contact-form-7-admin'), CF7HETE_VERSION );
         }
 
         /**
