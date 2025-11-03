@@ -2,7 +2,7 @@
 
 Contributors: mariovalney
 Donate link: https://mariovalney.com
-Tags: emails, cf7, contact form, contact form 7, email template, html email
+Tags: emails, cf7, contact form, email template
 Requires at least: 4.5
 Tested up to: 6.8
 Stable tag: 2.2.2
