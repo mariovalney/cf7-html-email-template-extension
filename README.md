@@ -1,10 +1,11 @@
 # HTML Template for CF7 #
+
 **Contributors:** mariovalney  
 **Donate link:** https://mariovalney.com  
 **Tags:** emails, cf7, contact form, contact form 7, email template, html email  
 **Requires at least:** 4.5  
-**Tested up to:** 6.4  
-**Stable tag:** trunk  
+**Tested up to:** 6.8  
+**Stable tag:** 2.2.2  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -61,6 +62,12 @@ You can add the following code to your `functions.php` file:
 
 
 ## Changelog ##
+
+### 2.2.2 ###
+
+* Fix unresponsive tabs in form editor with CF7 6.1+
+
+Props for "Francesco Zeno Selva" (zenotds). Thanks!
 
 ### 2.2.1 ###
 
